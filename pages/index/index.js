@@ -1,0 +1,138 @@
+Page({
+    data: {
+    appid: 'aaaaaaaa',
+    websocketServer: '开发者服务器接口地址，必须是 wss 协议，且域名必须是后台配置的合法域名',
+    sendMessageAbility: false,
+    toSendMessage: 'test',
+    closeLinkAbility: false,
+    log: '',
+    text: '初始化消息'
+  },
+
+  onLoad(query) {
+    // 页面加载
+    console.info(`Page onLoad with query: ${JSON.stringify(query)}`);
+
+    my.tg.playTTS({ text: '你好，欢迎来到小游戏。' })
+
+    my.onSocketClose((res) => {
+      my.alert({content: '连接已关闭！'});
+      this.setData({
+        sendMessageAbility: false,
+        closeLinkAbility: false,
+      });
+    });
+
+    my.onSocketOpen((res) => {
+      my.alert({content: '连接已打开！'});
+      //my.tg.nlpRequest({text: "今天天气"}); //模拟NLP语音请求
+      this.setData({
+        sendMessageAbility: true,
+        closeLinkAbility: true,
+      });
+    });
+
+    my.onSocketError(function(res){
+      my.alert('WebSocket 连接打开失败，请检查！' + res);
+    });
+
+    my.onSocketMessage((res) => {
+      //my.alert({content: '收到数据！' + JSON.stringify(res)});
+      my.tg.playTTS({ text: res.data, openMic: false })
+      this.setData({
+        text: res.data,
+      });
+    });
+  },
+
+  onServerAddressComplete(e) {
+    this.setData({
+      websocketServer:e.detail.value,
+    });
+  },
+
+  onSendMessageReady(e) {
+    this.setData({
+      toSendMessage:e.detail.value,
+    });
+  },
+
+  connect_start() {
+    my.connectSocket({
+      url: this.data.websocketServer, // 开发者服务器接口地址，必须是 wss 协议，且域名必须是后台配置的合法域名
+      success: (res) => {
+        my.showToast({
+          content: 'success', 
+        });
+      },
+      fail:()=>{
+        my.showToast({
+          content: 'fail', 
+        });
+      }
+    });
+  },
+
+  send_start() {
+    my.sendSocketMessage({
+      data: this.data.toSendMessage, // 需要发送的内容
+      success: (res) => {
+        my.alert({content: '数据发送！' + this.data.toSendMessage});
+      },
+    });
+  },
+
+  close_start() {
+    my.closeSocket();
+  },
+
+  onReady() {
+    // 页面加载完成
+  },
+
+  onShow() {
+    // 页面显示
+    //只允许应用内的语音技能调用，不跳出
+    my.call('useSystemSkill', {
+      skillName: 'chat'
+    })
+  },
+
+    //默认的语音指令回调
+  onVoiceEvent(event){
+    my.alert({content: "onVoiceEvent = " + JSON.stringify(event)}); 
+  },
+
+  respond() {
+    my.tg.playTTS({ text: '你好主人，欢迎开发语音小程序。您可以查看开发者文档探索更多我所具备的能力哦。' })
+  },
+
+  onHide() {
+    // 页面隐藏
+  },
+
+  onUnload() {
+    // 页面被关闭
+  },
+
+  onTitleClick() {
+    // 标题被点击
+  },
+
+  onPullDownRefresh() {
+    // 页面被下拉
+  },
+
+  onReachBottom() {
+    // 页面被拉到底部
+  },
+
+  onShareAppMessage() {
+    // 返回自定义分享信息
+    return {
+      title: 'My App',
+      desc: 'My App description',
+      path: 'pages/index/index',
+    };
+  },
+});

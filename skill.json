@@ -1,0 +1,10 @@
+{
+  "skill": [
+    {
+      "command": "hello",
+      "voice": [
+        "你好"
+      ]
+    }
+  ]
+}

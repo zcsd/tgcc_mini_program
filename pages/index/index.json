@@ -1,0 +1,10 @@
+{
+  "skill": [
+    {
+      "commands": [
+        "hello"
+      ],
+      "onVoice": "respond"
+    }
+  ]
+}
