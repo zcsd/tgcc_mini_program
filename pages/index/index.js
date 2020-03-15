@@ -25,7 +25,6 @@ Page({
 
     my.onSocketOpen((res) => {
       my.alert({content: '连接已打开！'});
-      //my.tg.nlpRequest({text: "今天天气"}); //模拟NLP语音请求
       this.setData({
         sendMessageAbility: true,
         closeLinkAbility: true,
@@ -37,7 +36,6 @@ Page({
     });
 
     my.onSocketMessage((res) => {
-      //my.alert({content: '收到数据！' + JSON.stringify(res)});
       my.tg.playTTS({ text: res.data, openMic: false })
       this.setData({
         text: res.data,
@@ -100,11 +98,19 @@ Page({
 
     //默认的语音指令回调
   onVoiceEvent(event){
-    my.alert({content: "onVoiceEvent = " + JSON.stringify(event)}); 
+    var query = event.param.query;
+    //my.alert({content: "语音指令" + query});
+    if (query.includes('扩散作用')){
+      my.tg.playTTS({ text: '扩散作用是指物质从含量高的地方向含量低的地方扩散' })
+    }else if(query.includes('渗透作用')){
+      my.tg.playTTS({ text: '渗透作用是指两种不同浓度的溶液隔以半透膜，水分子或其它溶剂分子从低浓度的溶液通过半透膜进入高浓度溶液中的现象' })
+    }else{
+      my.tg.nlpRequest({text: query}); 
+    }
   },
 
   respond() {
-    my.tg.playTTS({ text: '你好主人，欢迎开发语音小程序。您可以查看开发者文档探索更多我所具备的能力哦。' })
+    my.tg.playTTS({ text: '你好，欢迎来到小游戏。' })
   },
 
   onHide() {
