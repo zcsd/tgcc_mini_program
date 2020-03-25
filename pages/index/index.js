@@ -104,6 +104,20 @@ Page({
       my.tg.playTTS({ text: '扩散作用是指物质从含量高的地方向含量低的地方扩散' })
     }else if(query.includes('渗透作用')){
       my.tg.playTTS({ text: '渗透作用是指两种不同浓度的溶液隔以半透膜，水分子或其它溶剂分子从低浓度的溶液通过半透膜进入高浓度溶液中的现象' })
+    }else if(query.includes('温度') && (query.includes('高') || query.includes('加') || query.includes('多'))){
+      my.sendSocketMessage({
+        data: 'hotter', // 需要发送的内容
+        success: (res) => {
+          my.alert({content: '数据发送！' + this.data.toSendMessage});
+        },
+      });
+    }else if(query.includes('温度') && (query.includes('低') || query.includes('减') || query.includes('少'))){
+      my.sendSocketMessage({
+        data: 'colder', // 需要发送的内容
+        success: (res) => {
+          my.alert({content: '数据发送！' + this.data.toSendMessage});
+        },
+      });
     }else{
       my.tg.nlpRequest({text: query}); 
     }
