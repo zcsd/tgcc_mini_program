@@ -108,14 +108,21 @@ Page({
       my.sendSocketMessage({
         data: 'hotter', // 需要发送的内容
         success: (res) => {
-          my.alert({content: '数据发送！' + this.data.toSendMessage});
+          //my.alert({content: '数据发送！' + this.data.toSendMessage});
         },
       });
     }else if(query.includes('温度') && (query.includes('低') || query.includes('减') || query.includes('少'))){
       my.sendSocketMessage({
         data: 'colder', // 需要发送的内容
         success: (res) => {
-          my.alert({content: '数据发送！' + this.data.toSendMessage});
+          //my.alert({content: '数据发送！' + this.data.toSendMessage});
+        },
+      });
+    }else if(query.includes('左') && query.includes('加') ){
+      my.sendSocketMessage({
+        data: 'leftsalt', // 需要发送的内容
+        success: (res) => {
+          //my.alert({content: '数据发送！' + this.data.toSendMessage});
         },
       });
     }else{
